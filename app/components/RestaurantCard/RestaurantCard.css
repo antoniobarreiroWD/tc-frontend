@@ -1,0 +1,8 @@
+.hovered .restaurant-item {
+    opacity: 0.5;
+    transition: opacity ease-in-out 0.2s;
+}
+
+.hovered .restaurant-item:hover {
+    opacity: 1;
+}

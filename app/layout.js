@@ -1,16 +1,5 @@
-import localFont from "next/font/local";
 import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import AuthContextProvider from "./context/AuthContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -19,11 +8,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" className="text-[18px] lg:text-[20px] 2xl:text-[24px]">
+      <body className="flex flex-col h-dvh justify-between">
+        <AuthContextProvider>
+          {children}
+        </AuthContextProvider>
+        <footer className="px-5 lg:px-10 py-4">
+          <span className="text-xs">Prueba técnica @Tailor hub 2019 - 2024</span>
+        </footer>
       </body>
     </html>
   );

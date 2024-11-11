@@ -8,9 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'tailor-blue': '#264BEB',
+        'tailor-gray': '#F1F1F0',
       },
+      backgroundImage: {
+        'home': "url('/Home.png')",
+        'login': "url('/Login.png')",
+        'signup': "url('/Signup.png')",
+      }
     },
   },
   plugins: [],

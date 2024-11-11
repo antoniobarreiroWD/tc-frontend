@@ -1,0 +1,31 @@
+
+.restaurants-list {
+    list-style: none;
+    padding: 0;
+}
+
+.restaurant-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.3s;
+}
+
+.restaurant-item:hover {
+    background-color: #f3f4f6;
+}
+
+.restaurant-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+
+.restaurant-info {
+    flex: 1;
+}
+
+.like-icon {
+    cursor: pointer;
+}
