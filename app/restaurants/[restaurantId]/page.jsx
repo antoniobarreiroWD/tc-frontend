@@ -49,7 +49,7 @@ export default function RestaurantDetails({ params: paramsPromise }) {
       await restaurantService.deleteRestaurant(params.restaurantId);
       setMessage("El restaurante ha sido eliminado");
     } catch (error) {
-      setMessage("Ups, algo salió mal al eliminar el restaurante");
+      setMessage("No se pudo eliminar el restaurante");
     }
   };
 

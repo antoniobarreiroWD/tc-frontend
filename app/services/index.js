@@ -16,7 +16,7 @@ class AxiosConfig {
             ? `${baseUrl}${cleanPath ? '/api/' + cleanPath : ''}`
             : '';
 
-        console.log('Final URL:', finalUrl);
+      
 
         this.axios = axios.create({
             baseURL: finalUrl,
@@ -27,12 +27,7 @@ class AxiosConfig {
 
         
         this.axios.interceptors.request.use(config => {
-            console.log('Request Config:', {
-                method: config.method,
-                url: config.url,
-                baseURL: config.baseURL,
-                fullURL: config.baseURL + (config.url || '')
-            });
+           
             return config;
         });
     }
