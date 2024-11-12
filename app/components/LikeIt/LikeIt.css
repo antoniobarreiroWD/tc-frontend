@@ -3,10 +3,6 @@
     color: #ef4444; 
 }
 
-.bg-red-100 {
-    background-color: #fee2e2;
-}
-
 .like-icon {
     transition: color 0.3s;
 }
