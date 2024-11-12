@@ -13,7 +13,7 @@ class AxiosConfig {
 
         
         const finalUrl = baseUrl 
-            ? `${baseUrl}${cleanPath ? '/api/' + cleanPath : ''}`
+            ? `${baseUrl}${cleanPath ?  + cleanPath : ''}`
             : '';
 
         console.log('Final URL:', finalUrl);
