@@ -11,7 +11,7 @@ export default function LikeIt({ className, id, favouriteRestaurants, toggleFavo
 
     return (
         <div
-            className={`cursor-pointer w-[34px] h-[34px] ${className} z-50 ${isFavourite ? 'text-red-500' : ''}`}
+            className={`cursor-pointer w-[34px] h-[34px] ${className} z-40 ${isFavourite ? 'text-red-500' : ''}`}
             onClick={() => toggleFavouriteRestaurant(id)}
         >
             <LikeIcon like={isFavourite} />
