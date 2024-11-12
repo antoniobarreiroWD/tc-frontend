@@ -9,10 +9,15 @@ export default function LikeIt({ className, id, favouriteRestaurants, toggleFavo
         setIsFavourite(favouriteRestaurants.includes(id));
     }, [favouriteRestaurants, id]);
 
+    const handleClick = (e) => {
+        e.stopPropagation(); 
+        toggleFavouriteRestaurant(id);
+    };
+
     return (
         <div
             className={`cursor-pointer w-[34px] h-[34px] ${className} z-50 ${isFavourite ? 'text-red-500' : ''}`}
-            onClick={() => toggleFavouriteRestaurant(id)}
+            onClick={handleClick}
         >
             <LikeIcon like={isFavourite} />
         </div>
