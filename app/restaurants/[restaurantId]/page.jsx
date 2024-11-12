@@ -19,7 +19,9 @@ export default function RestaurantDetails({ params: paramsPromise }) {
 
   const getRestaurant = async () => {
     try {
-      const response = await restaurantService.getRestaurantById(params.restaurantId);
+      const response = await restaurantService.getRestaurantById(
+        params.restaurantId
+      );
       setRestaurant(response);
       if (response.image) {
         checkImage(response.image);
@@ -61,7 +63,10 @@ export default function RestaurantDetails({ params: paramsPromise }) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      const updatedRestaurant = await restaurantService.editRestaurant(params.restaurantId, restaurant);
+      const updatedRestaurant = await restaurantService.editRestaurant(
+        params.restaurantId,
+        restaurant
+      );
       setShowModal(false);
       setRestaurant(updatedRestaurant);
       setMessage("Restaurante actualizado con éxito");
@@ -103,11 +108,13 @@ export default function RestaurantDetails({ params: paramsPromise }) {
             <h3 className="text-xl font-semibold mt-4">Horario de apertura</h3>
             <ul className="mb-4">
               {restaurant.operating_hours &&
-                Object.entries(restaurant.operating_hours).map(([day, hours]) => (
-                  <li key={day} className="text-md text-gray-600">
-                    {day}: {hours}
-                  </li>
-                ))}
+                Object.entries(restaurant.operating_hours).map(
+                  ([day, hours]) => (
+                    <li key={day} className="text-md text-gray-600">
+                      {day}: {hours}
+                    </li>
+                  )
+                )}
             </ul>
 
             <h3 className="text-xl font-semibold mt-4">Reseñas</h3>
@@ -116,15 +123,22 @@ export default function RestaurantDetails({ params: paramsPromise }) {
                 {restaurant.reviews.map((review, index) => (
                   <li key={index} className="p-4 bg-gray-100 rounded-md">
                     <p className="font-semibold">
-                      {review.name} <span className="text-sm text-gray-500">({review.date.split("T")[0]})</span>
+                      {review.name}{" "}
+                      <span className="text-sm text-gray-500">
+                        ({review.date.split("T")[0]})
+                      </span>
                     </p>
-                    <p className="text-sm text-yellow-500">Rating: {review.rating} / 5</p>
+                    <p className="text-sm text-yellow-500">
+                      Rating: {review.rating} / 5
+                    </p>
                     <p className="mt-2">{review.comments}</p>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-md text-gray-500">No hay reseñas disponibles</p>
+              <p className="text-md text-gray-500">
+                No hay reseñas disponibles
+              </p>
             )}
 
             {user && (
@@ -147,12 +161,17 @@ export default function RestaurantDetails({ params: paramsPromise }) {
 
           {showModal && (
             <Modal onClose={() => setShowModal(false)}>
-              <h2 className="text-2xl font-semibold text-center mb-6">Edita el restaurante</h2>
-              <CreateRestaurantForm
-                handleChange={handleChange}
-                handleSubmit={handleSubmitEdit}
-                data={restaurant}
-              />
+              <div className="modal-content max-w-lg md:max-w-2xl lg:max-w-3xl w-full mx-auto bg-white p-6 rounded-lg shadow-lg">
+
+                <h2 className="text-2xl font-semibold text-center mb-6">
+                  Edita el restaurante
+                </h2>
+                <CreateRestaurantForm
+                  handleChange={handleChange}
+                  handleSubmit={handleSubmitEdit}
+                  data={restaurant}
+                />
+              </div>
             </Modal>
           )}
         </div>
