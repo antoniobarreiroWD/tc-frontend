@@ -28,7 +28,7 @@
     visibility: hidden;
     transform: translateY(-10px);
     transition: opacity 0.2s ease, transform 0.2s ease;
-    z-index: 50;
+    z-index: 60;
 }
 
 .dropdown-menu.open {
