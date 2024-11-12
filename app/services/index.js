@@ -4,22 +4,35 @@ import Cookies from 'js-cookie'
 class AxiosConfig {
     constructor(path) {
         
-        const baseUrl = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/+$/, '');
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL 
+            ? process.env.NEXT_PUBLIC_API_URL.trim()
+            : '';
+
         
-       
-        const cleanPath = (path || '').replace(/^\/+/, '');
+        const cleanPath = path ? path.replace(/^\/+|\/+$/g, '') : '';
+
         
+        const finalUrl = baseUrl 
+            ? `${baseUrl}${cleanPath ? '/api/' + cleanPath : ''}`
+            : '';
+
+        console.log('Final URL:', finalUrl);
+
         this.axios = axios.create({
-            
-            baseURL: `${baseUrl}/${cleanPath}`.replace(/\/+/g, '/')
+            baseURL: finalUrl,
+            headers: {
+                'Content-Type': 'application/json',
+            }
         });
 
         
-        this.axios.interceptors.request.use((config) => {
-            const token = this.getToken();
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
+        this.axios.interceptors.request.use(config => {
+            console.log('Request Config:', {
+                method: config.method,
+                url: config.url,
+                baseURL: config.baseURL,
+                fullURL: config.baseURL + (config.url || '')
+            });
             return config;
         });
     }
