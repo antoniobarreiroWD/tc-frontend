@@ -2,6 +2,7 @@ import './RestaurantsList.css';
 import Link from 'next/link';
 import LikeIt from '../LikeIt/LikeIt';
 import { useState, useEffect } from 'react';
+import RatingStars from '../RatingStars.js/RatingStars';
 
 function RestaurantItem({ restaurant, fnMouseEnter, fnMouseLeave, favouriteRestaurants, toggleFavouriteRestaurant }) {
     const [imageSrc, setImageSrc] = useState(restaurant.image || restaurant.photograph || '/default-restaurant.jpg');
@@ -37,6 +38,7 @@ function RestaurantItem({ restaurant, fnMouseEnter, fnMouseLeave, favouriteResta
                             <h3 className="restaurant-name font-semibold text-lg">{restaurant.name}</h3>
                             <p className="restaurant-address text-sm text-gray-600">{restaurant.address}</p>
                             <p className="restaurant-neighborhood text-sm text-gray-500">{restaurant.neighborhood}</p>
+                            <RatingStars reviews={restaurant.reviews} />
                         </div>
                     </div>
                 </Link>

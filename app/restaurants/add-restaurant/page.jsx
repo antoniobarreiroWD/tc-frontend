@@ -1,6 +1,7 @@
-'use client'
-import CreateRestaurantForm from "../../components/CreateRestaurantForm/CreateRestaurantForm";
+'use client';
+
 import { useState } from "react";
+import CreateRestaurantForm from "../../components/CreateRestaurantForm/CreateRestaurantForm";
 import restaurantService from '../../services/restaurants.service';
 
 export default function CreateRestaurant() {
@@ -8,12 +9,16 @@ export default function CreateRestaurant() {
     const [formSended, setFormSended] = useState(false);
     const [newRestaurantId, setNewRestaurantId] = useState(null);
     const [message, setMessage] = useState('');
+    const [uploading, setUploading] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null);
 
     const initialData = {
         image: '',
         name: '',
         address: '',
-        description: ''
+        description: '',
+        cuisine_type: '',
+        neighborhood: '',
     };
 
     const [restaurantData, setRestaurantData] = useState(initialData);
@@ -23,10 +28,39 @@ export default function CreateRestaurant() {
         setRestaurantData({ ...restaurantData, [name]: value });
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file)); 
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+
+            setUploading(true);
+            try {
+                const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                setRestaurantData({ ...restaurantData, image: data.secure_url });
+                setUploading(false);
+            } catch (err) {
+                console.error("Error al subir la imagen:", err);
+                setUploading(false);
+            }
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setPreviewImage(null);
+        setRestaurantData({ ...restaurantData, image: '' });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { image, name, address, description } = restaurantData;
-        const data = { image, name, address, description };
+        const { image, name, address, description, cuisine_type, neighborhood } = restaurantData;
+        const data = { image, name, address, description, cuisine_type, neighborhood };
 
         try {
             const response = await restaurantService.createRestaurant(data);
@@ -42,7 +76,7 @@ export default function CreateRestaurant() {
             console.error("Error al crear el restaurante:", err);
             setFormSended(true);
             setError(true);
-            setMessage('Ups, algo salió mal al guardar el restaurante');
+            setMessage('No se ha podido guardar el restaurante');
         }
     };
 
@@ -56,24 +90,38 @@ export default function CreateRestaurant() {
             {!formSended ? (
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
                     <div className="flex flex-col gap-3">
-                        <label htmlFor="image" className="text-sm font-medium">URL de la imagen</label>
-                        <input
-                            type="text"
-                            name="image"
-                            value={restaurantData.image}
-                            onChange={handleChange}
-                            placeholder="Introduce la URL de la imagen"
-                            className="p-2 border rounded-md"
-                        />
-                        {restaurantData.image && (
-                            <img src={restaurantData.image} alt="Preview" className="mt-3 w-full h-auto rounded-md shadow-md" />
-                        )}
+                        <label htmlFor="image" className="text-sm font-medium">Imagen del Restaurante</label>
+                        <div className="relative w-full max-w-2xl h-48 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center overflow-hidden">
+                            {previewImage ? (
+                                <>
+                                    <img src={previewImage} alt="Vista previa" className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveImage}
+                                        className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-center hover:bg-opacity-75"
+                                    >
+                                        Eliminar imagen
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <input
+                                        type="file"
+                                        id="image"
+                                        onChange={handleImageUpload}
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                    />
+                                    <span className="text-gray-400">Haz clic para subir una imagen</span>
+                                </>
+                            )}
+                        </div>
+                        {uploading && <p>Cargando imagen...</p>}
                     </div>
                     <CreateRestaurantForm handleChange={handleChange} handleSubmit={handleSubmit} />
                 </form>
             ) : (
                 <div className="text-center space-y-4">
-                    <p>{!error ? 'Restaurante guardado con éxito.' : 'Ups, algo salió mal.'}</p>
+                    <p>{!error ? 'Restaurante guardado con éxito.' : 'Algo ha salido mal.'}</p>
                     <a href={!error ? `/restaurants/${newRestaurantId}` : '/restaurants/add-restaurant'}
                        className="text-blue-500 hover:underline">
                         {!error ? 'Ver restaurante' : 'Intentar de nuevo'}
